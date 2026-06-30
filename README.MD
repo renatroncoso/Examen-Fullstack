@@ -1,3 +1,6 @@
+###### Datos Alumno #######
+Renato Igncio Troncoso Latorre
+
 ###### Enunciado del Examen ######
 
 El estudiante debe desarrollar **uno de los siguientes microservicios** e integrarlo a la infraestructura existente (Eureka Server, API Gateway, Login Service, Destination Service y Traveler Service).  
@@ -260,5 +263,6 @@ IE 2.5.2 Explica su aporte personal al proyecto, justificando commits, tareas as
 
 IE 3.1.2 Explica con claridad el funcionamiento de las pruebas unitarias generadas en el proyecto, justificando decisiones técnicas y relacionándolas con el dominio del microservicio, e integra nuevas pruebas unitarias en tiempo acotado, aplicando correctamente la lógica requerida y manteniendo la consistencia del proyecto. (ARCHIVO README EN EL PROYECTO)
 
-IE 3.2.2 Explica la documentación técnica generada con Swagger/OpenAPI, recorriendo rutas, respuestas, modelos y ejemplos, y demostrando consistencia entre la documentación y el comportamiento real del código. (ARCHIVO README EN EL PROYECTO)#   E x a m e n - F u l l s t a c k  
+IE 3.2.2 Explica la documentación técnica generada con Swagger/OpenAPI, recorriendo rutas, respuestas, modelos y ejemplos, y demostrando consistencia entre la documentación y el comportamiento real del código. (ARCHIVO README EN EL PROYECTO)#   E x a m e n - F u l l s t a c k 
+ 
  
