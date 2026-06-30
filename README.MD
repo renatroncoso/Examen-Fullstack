@@ -263,6 +263,35 @@ IE 2.5.2 Explica su aporte personal al proyecto, justificando commits, tareas as
 
 IE 3.1.2 Explica con claridad el funcionamiento de las pruebas unitarias generadas en el proyecto, justificando decisiones técnicas y relacionándolas con el dominio del microservicio, e integra nuevas pruebas unitarias en tiempo acotado, aplicando correctamente la lógica requerida y manteniendo la consistencia del proyecto. (ARCHIVO README EN EL PROYECTO)
 
-IE 3.2.2 Explica la documentación técnica generada con Swagger/OpenAPI, recorriendo rutas, respuestas, modelos y ejemplos, y demostrando consistencia entre la documentación y el comportamiento real del código. (ARCHIVO README EN EL PROYECTO)#   E x a m e n - F u l l s t a c k 
- 
- 
+IE 3.2.2 Explica la documentación técnica generada con Swagger/OpenAPI, recorriendo rutas, respuestas, modelos y ejemplos, y demostrando consistencia entre la documentación y el comportamiento real del código. (ARCHIVO README EN EL PROYECTO)
+
+# 🗺️ Microservicio de Itinerario
+
+## 📋 Descripción General
+Microservicio para la gestión de itinerarios de viaje, permitiendo a los usuarios planificar y organizar sus viajes con lugares específicos como hoteles, tours y sitios turísticos.
+### 📝 Explicación del Modelado
+
+**Entidad Itinerary (Itinerario)**
+- Representa un viaje planificado por un usuario
+- **Atributo clave**: `traveler_id` - Referencia al viajero en el Traveler Service
+**Entidad Place (Lugar)**
+- Representa lugares específicos que el viajero visitará en su itinerario
+- **Clasificación**: `place_type` (HOTEL, TOUR, SITIO_TURISTICO) para categorizar los lugares
+- **Orden**: `visit_order` permite al viajero establecer el orden de visita
+- **Relación**: Pertenece a un solo itinerario (ManyToOne)
+
+**Relaciones**
+- **OneToMany**: Un itinerario puede tener múltiples lugares
+- **Cascade**: Se eliminan los lugares en cascada cuando se elimina un itinerario (`ON DELETE CASCADE`)
+- **Claves foráneas**: `itinerary_id` en la tabla `places` referencia a `id` en `itineraries`
+
+### 🎯 Decisiones Técnicas
+
+| Decisión | Justificación |
+|----------|---------------|
+| **Separación de entidades** | Itinerario y Place como entidades separadas permite CRUD independiente |
+| **Enum para PlaceType** | Clasificación estricta de lugares, evita datos inconsistentes |
+| **Referencia lógica a Traveler** | No se usa FK directa para mantener desacoplamiento entre microservicios |
+| **Campos de auditoría** | `created_at` y `updated_at` para trazabilidad |
+| **Soft delete** | `is_active` en lugar de eliminar físicamente los registros |
+| **Relación Cascade** | Eliminación automática de lugares al eliminar itinerario |
