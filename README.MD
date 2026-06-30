@@ -295,3 +295,38 @@ Microservicio para la gestión de itinerarios de viaje, permitiendo a los usuari
 | **Campos de auditoría** | `created_at` y `updated_at` para trazabilidad |
 | **Soft delete** | `is_active` en lugar de eliminar físicamente los registros |
 | **Relación Cascade** | Eliminación automática de lugares al eliminar itinerario |
+### 🎯 Explicación del Flujo
+
+**1. Validación de Token (Seguridad)**
+- Cada petición que llega al Itinerary Service pasa por el `JwtAuthenticationFilter`
+- El filtro extrae el token del Header `Authorization: Bearer {token}`
+- Se valida el token con el **Login Service** a través del `AuthClient`
+- Si el token es válido, se permite la petición; si no, se retorna 401 Unauthorized
+
+**2. Validación del Viajero (Regla de Negocio)**
+- Antes de crear un itinerario, se valida que el `travelerId` existe
+- El `TravelerClient` consume el endpoint `/api/v1/traveler/validate/{id}` del **Traveler Service**
+- Si el viajero no existe, se lanza una excepción y no se crea el itinerario
+
+**3. Eureka Server (Descubrimiento)**
+- Todos los microservicios se registran en Eureka
+- El Gateway usa Eureka para descubrir las instancias de los servicios
+- Permite balanceo de carga y tolerancia a fallos
+
+### 📦 Servicios Involucrados
+
+| Servicio | Rol | Puerto | Acción |
+|----------|-----|--------|--------|
+| **Login Service** | Autenticación | 9000 | Validar token JWT |
+| **Traveler Service** | Gestión de viajeros | 9002 | Validar existencia de viajero |
+| **Itinerary Service** | Gestión de itinerarios | 9003 | Crear/Actualizar/Obtener itinerarios |
+| **API Gateway** | Enrutamiento | 9999 | Enrutar peticiones |
+| **Eureka Server** | Descubrimiento | 8761 | Registrar servicios |
+
+### ❓ ¿Qué pasa si un servicio falla?
+
+| Escenario | Comportamiento |
+|-----------|---------------|
+| Login Service no responde | Token inválido → 401 Unauthorized |
+| Traveler Service no responde | No se puede validar viajero → Error 500 |
+| Eureka Server no responde | Servicios usan configuración local (fallback) |
