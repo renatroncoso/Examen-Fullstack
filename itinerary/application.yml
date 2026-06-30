@@ -1,18 +1,27 @@
 spring:
   application:
     name: itinerary
+  
   datasource:
-    url: jdbc:mysql://localhost:3310/itinerary
+    url: jdbc:mysql://localhost:3313/itinerary?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: examen
     password: examen123
     driver-class-name: com.mysql.cj.jdbc.Driver
+  
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate  # Cambiar a validate para usar Flyway
     database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  
   flyway:
     enabled: true
+    baseline-on-migrate: true
     locations: classpath:db/migration
+    schemas: itinerary
 
 server:
   port: 9003
@@ -30,7 +39,10 @@ eureka:
 logging:
   level:
     root: INFO
-    cl.duoc.login: DEBUG
+    cl.duoc.itinerary: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.flywaydb: DEBUG
   file:
     name: logs/itinerary-service.log
   pattern:
@@ -41,7 +53,7 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
-    path: /index.html
+    path: /swagger-ui.html
     disable-swagger-default-url: true
     
 management:
@@ -52,3 +64,9 @@ management:
   endpoint:
     health:
       show-details: always
+
+# Configuración de servicios para WebClient
+services:
+  traveler:
+    url: http://localhost:9002
+    path: /api/v1/traveler/validate

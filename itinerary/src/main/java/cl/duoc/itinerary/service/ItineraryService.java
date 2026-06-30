@@ -24,8 +24,10 @@ public class ItineraryService {
     public Itinerary createItinerary(ItineraryDTO itineraryDTO) {
         log.info("Creando itinerario para travelerId: {}", itineraryDTO.getTravelerId());
         
-        // Validar que el viajero existe (comunicación con Traveler Service)
-        travelerClient.validateTraveler(itineraryDTO.getTravelerId());
+        // Validar que el viajero existe
+        if (!travelerClient.validateTraveler(itineraryDTO.getTravelerId())) {
+            throw new RuntimeException("El viajero con ID " + itineraryDTO.getTravelerId() + " no existe");
+        }
         
         // Calcular días totales
         long days = ChronoUnit.DAYS.between(itineraryDTO.getStartDate(), itineraryDTO.getEndDate());
@@ -67,7 +69,7 @@ public class ItineraryService {
 
     public Itinerary getItineraryById(Long id) {
         return itineraryRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Itinerario no encontrado con id: " + id));
+                .orElseThrow(() -> new RuntimeException("Itinerario no encontrado con id: " + id));
     }
 
     public List<Itinerary> getItinerariesByTraveler(Long travelerId) {
